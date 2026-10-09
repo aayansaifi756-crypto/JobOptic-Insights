@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>JobOptic Insights</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header class="navbar">
+
+        <div class="logo-area">
+
+            <div class="logo-icon">
+                📊
+            </div>
+
+            <div>
+                <h2>JobOptic</h2>
+                <span>Insights</span>
+            </div>
+
+        </div>
+
+        <nav>
+    <a href="/">Home</a>
+    <a href="/dashboard">Dashboard</a>
+    <a href="/analysis">Analysis</a>
+    <a href="#features">Features</a>
+    <a href="#about">About</a>
+    <a href="/skill-gap">Skill Gap</a>
+    <a href="/job-explorer">Job Explorer</a>
+</nav>
+
+    </header>
+
+
+    <!-- Main Hero Section -->
+    <main>
+
+        <section class="hero">
+
+            <div class="hero-content">
+
+                <p class="tagline">
+                    JOB MARKET ANALYTICS PLATFORM
+                </p>
+
+                <h1>
+                    JobOptic <span>Insights</span>
+                </h1>
+
+                <p class="description">
+                    Analyze job market trends, discover in-demand skills
+                    and identify skill gaps for your target career.
+                </p>
+
+                <button onclick="window.location.href='/analysis'">
+    Start Analysis →
+</button>
+
+            </div>
+
+
+            <!-- Dashboard Preview -->
+            <div class="dashboard-card">
+
+                <div class="card-header">
+                    <h3>Job Market Overview</h3>
+                    <span>Live Analysis</span>
+                </div>
+
+                <div class="stats">
+
+                    <div class="stat-box">
+                        <h2>1,250+</h2>
+                        <p>Job Posts</p>
+                    </div>
+
+                    <div class="stat-box">
+                        <h2>85+</h2>
+                        <p>Skills</p>
+                    </div>
+
+                    <div class="stat-box">
+                        <h2>35+</h2>
+                        <p>Job Roles</p>
+                    </div>
+
+                </div>
+
+                <div class="skill-section">
+
+                    <h3>Top Skills</h3>
+
+                    <div class="skill">
+                        <span>SQL</span>
+                        <div class="bar">
+                            <div class="fill sql"></div>
+                        </div>
+                    </div>
+
+                    <div class="skill">
+                        <span>Excel</span>
+                        <div class="bar">
+                            <div class="fill excel"></div>
+                        </div>
+                    </div>
+
+                    <div class="skill">
+                        <span>Python</span>
+                        <div class="bar">
+                            <div class="fill python"></div>
+                        </div>
+                    </div>
+
+                    <div class="skill">
+                        <span>Power BI</span>
+                        <div class="bar">
+                            <div class="fill powerbi"></div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Features -->
+        <section id="features" class="features">
+
+            <h2>What can JobOptic Insights do?</h2>
+
+            <div class="feature-container">
+
+                <div class="feature-card">
+                    <div class="feature-icon">📈</div>
+                    <h3>Skill Demand</h3>
+                    <p>
+                        Find which skills are frequently required
+                        in the selected job market.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Skill Gap Analysis</h3>
+                    <p>
+                        Compare your existing skills with the
+                        skills required for your target role.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">💼</div>
+                    <h3>Job Market Analysis</h3>
+                    <p>
+                        Analyze job roles, locations and
+                        experience requirements.
+                    </p>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- About -->
+        <section id="about" class="about">
+
+            <h2>About JobOptic Insights</h2>
+
+            <p>
+                JobOptic Insights is a data analytics project that
+                analyzes job market data to understand skill demand,
+                job roles, locations and skill gaps.
+            </p>
+
+        </section>
+
+    </main>
+
+
+    <!-- Footer -->
+    <footer>
+
+        <p>
+            © 2026 JobOptic Insights | Job Market & Skill Analytics
+        </p>
+
+    </footer>
+
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+</body>
+
+</html>

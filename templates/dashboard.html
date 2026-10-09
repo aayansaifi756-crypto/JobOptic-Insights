@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Analytics Dashboard | JobOptic Insights</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+  <style>
+    :root{--navy:#111b35;--blue:#3b67f2;--sky:#eaf0ff;--ink:#19233a;--muted:#69758d;--paper:#f5f7fc;--line:#e7ebf4;--white:#fff;--green:#18a778;--purple:#8b5cf6}
+    *{box-sizing:border-box}body{margin:0;background:var(--paper);font-family:Inter,Segoe UI,Arial,sans-serif;color:var(--ink)}
+    .topbar{background:var(--navy);color:#fff;padding:16px clamp(16px,4vw,56px);display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap}
+    .brand{display:flex;align-items:center;gap:12px}.brand-mark{background:linear-gradient(140deg,#5278ff,#8b5cf6);width:42px;height:42px;border-radius:13px;display:grid;place-items:center;font-size:22px;box-shadow:0 8px 20px #0003}.brand h2{margin:0;font-size:19px;letter-spacing:.1px}.brand h2 span{color:#8eb3ff}.brand small{display:block;color:#b6c3e4;margin-top:3px;font-size:11px;letter-spacing:.4px}
+    nav{display:flex;gap:8px;flex-wrap:wrap}nav a{color:#dbe5ff;text-decoration:none;padding:9px 12px;border-radius:9px;font-size:13px}nav a:hover,nav a.active{background:#ffffff1b;color:#fff}
+    main{max-width:1440px;margin:0 auto;padding:30px clamp(14px,3vw,38px) 44px}.page-head{display:flex;justify-content:space-between;align-items:flex-end;gap:18px;flex-wrap:wrap;margin-bottom:22px}.eyebrow{text-transform:uppercase;letter-spacing:1.8px;color:var(--blue);font-weight:800;font-size:10px}.page-head h1{font-size:clamp(26px,3.5vw,36px);margin:7px 0 8px;letter-spacing:-1px}.page-head p{margin:0;color:var(--muted);font-size:14px;line-height:1.6}.dataset-pill{white-space:nowrap;display:inline-flex;align-items:center;gap:7px;background:#e6f8f1;color:#087e58;border:1px solid #c8f0e1;border-radius:999px;padding:9px 13px;font-size:12px;font-weight:700}
+    .filter-panel{background:var(--white);padding:18px;border:1px solid var(--line);border-radius:16px;box-shadow:0 7px 22px #17264d08;margin-bottom:20px}.filter-title{margin:0 0 13px;font-size:13px;font-weight:800}.filters{display:grid;grid-template-columns:minmax(180px,1fr) minmax(180px,1fr) auto auto;gap:10px;align-items:end}.field label{font-size:11px;font-weight:750;color:var(--muted);display:block;margin:0 0 7px}.field input{height:43px;width:100%;border:1px solid #dce2ee;background:#fbfcff;border-radius:10px;padding:0 12px;font:inherit;color:var(--ink);outline:none}.field input:focus{border-color:var(--blue);box-shadow:0 0 0 3px #3b67f21a}.btn{height:43px;border:0;border-radius:10px;padding:0 17px;font-weight:800;cursor:pointer;font-size:12px;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}.btn-primary{background:var(--blue);color:#fff;box-shadow:0 6px 14px #3b67f230}.btn-primary:hover{background:#2e56dc}.btn-light{background:#f0f3fa;color:#394764}.filter-note{font-size:11px;color:var(--muted);margin:11px 0 0;line-height:1.5}
+    .kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:20px}.kpi{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:19px;min-height:133px;position:relative;overflow:hidden;box-shadow:0 7px 22px #17264d08}.kpi:after{content:"";position:absolute;width:95px;height:95px;right:-26px;top:-28px;border-radius:50%;background:var(--glow,#eaf0ff)}.kpi-top{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:8px}.kpi-label{font-size:12px;color:var(--muted);font-weight:700}.kpi-icon{height:31px;width:31px;border-radius:10px;display:grid;place-items:center;background:var(--glow,#eaf0ff);font-size:15px}.kpi-value{position:relative;z-index:1;font-size:clamp(23px,2.5vw,30px);font-weight:850;letter-spacing:-1px;margin:14px 0 5px}.kpi-sub{position:relative;z-index:1;color:var(--muted);font-size:11px}.kpi.blue{--glow:#eaf0ff}.kpi.green{--glow:#e4f8f0}.kpi.purple{--glow:#f0eaff}.kpi.orange{--glow:#fff0df}
+    .chart-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.chart-card{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:0 7px 22px #17264d08;min-width:0}.chart-header{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin-bottom:12px}.chart-header h3{margin:0;font-size:15px;letter-spacing:-.2px}.chart-header p{margin:6px 0 0;color:var(--muted);font-size:11px}.chart-tag{background:#f0f3fa;color:#53617b;padding:6px 8px;border-radius:8px;font-size:10px;font-weight:750;white-space:nowrap}.canvas-wrap{height:280px;position:relative}.chart-card.wide{grid-column:1/-1}.chart-card.wide .canvas-wrap{height:320px}.empty{margin:20px 0;color:var(--muted);font-size:13px}.footer-note{text-align:center;color:#8390a8;font-size:11px;line-height:1.6;margin:22px 0 0}.filter-active{font-size:11px;color:#3552a6;background:#edf2ff;border-radius:8px;padding:7px 10px;margin-top:12px;display:inline-block}
+    @media(max-width:900px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.filters{grid-template-columns:repeat(2,minmax(0,1fr))}.filter-actions{display:flex;gap:8px}.filter-actions .btn{flex:1}}
+    @media(max-width:650px){.chart-grid{grid-template-columns:1fr}.chart-card.wide{grid-column:auto}.canvas-wrap,.chart-card.wide .canvas-wrap{height:260px}.topbar{align-items:flex-start}.brand h2{font-size:17px}nav{width:100%}.filters{grid-template-columns:1fr}.filter-actions{grid-column:auto}.kpi{padding:15px;min-height:122px}.kpi-value{font-size:25px}}
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><div class="brand-mark">📊</div><div><h2>JobOptic <span>Insights</span></h2><small>JOB MARKET ANALYTICS PLATFORM</small></div></div>
+    <nav aria-label="Main navigation">
+      <a href="/">Home</a><a href="/analysis">Analysis</a><a class="active" href="/dashboard">Dashboard</a><a href="/skill-gap">Skill Gap</a><a href="/job-explorer">Job Explorer</a>
+    </nav>
+  </header>
+  <main>
+    <section class="page-head">
+      <div><div class="eyebrow">Data intelligence · Job market</div><h1>Job Market Dashboard</h1><p>Explore hiring activity, role demand, location trends and in-demand skills in one place.</p></div>
+      <div class="dataset-pill">● Dataset connected</div>
+    </section>
+
+    <section class="filter-panel">
+      <h2 class="filter-title">Filter the dashboard</h2>
+      <form method="get" action="/dashboard" class="filters">
+        <div class="field"><label for="role">Job title contains</label><input id="role" name="role" list="role-options" value="{{ selected_role }}" placeholder="e.g. Data Analyst"><datalist id="role-options">{% for item in role_options %}<option value="{{ item }}">{% endfor %}</datalist></div>
+        <div class="field"><label for="location">Location contains</label><input id="location" name="location" list="location-options" value="{{ selected_location }}" placeholder="e.g. Noida"><datalist id="location-options">{% for item in location_options %}<option value="{{ item }}">{% endfor %}</datalist></div>
+        <div class="filter-actions"><button class="btn btn-primary" type="submit">Apply filters</button></div>
+        <div class="filter-actions"><a class="btn btn-light" href="/dashboard">Reset</a></div>
+      </form>
+      {% if selected_role or selected_location %}<div class="filter-active">Showing filtered data{% if selected_role %} · Role: {{ selected_role }}{% endif %}{% if selected_location %} · Location: {{ selected_location }}{% endif %}</div>{% else %}<p class="filter-note">Choose a job title or location and apply filters. Type to search the available suggestions.</p>{% endif %}
+    </section>
+
+    <section class="kpis">
+      <article class="kpi blue"><div class="kpi-top"><span class="kpi-label">Total job records</span><span class="kpi-icon">▦</span></div><div class="kpi-value">{{ '{:,}'.format(total_jobs) }}</div><div class="kpi-sub">Listings matching current filters</div></article>
+      <article class="kpi green"><div class="kpi-top"><span class="kpi-label">Unique job titles</span><span class="kpi-icon">◫</span></div><div class="kpi-value">{{ '{:,}'.format(job_titles_count) }}</div><div class="kpi-sub">Distinct titles in this selection</div></article>
+      <article class="kpi purple"><div class="kpi-top"><span class="kpi-label">Unique locations</span><span class="kpi-icon">⌖</span></div><div class="kpi-value">{{ '{:,}'.format(locations_count) }}</div><div class="kpi-sub">Distinct location values in this selection</div></article>
+      <article class="kpi orange"><div class="kpi-top"><span class="kpi-label">Salary disclosed</span><span class="kpi-icon">₹</span></div><div class="kpi-value">{{ '{:,}'.format(salary_listings) }}</div><div class="kpi-sub">Records with both salary bounds available</div></article>
+    </section>
+
+    <section class="chart-grid">
+      <article class="chart-card"><div class="chart-header"><div><h3>Top Job Titles</h3><p>Most frequent titles in the selected dataset</p></div><span class="chart-tag">TOP 10</span></div><div class="canvas-wrap"><canvas id="rolesChart" aria-label="Top job titles chart"></canvas></div></article>
+      <article class="chart-card"><div class="chart-header"><div><h3>Top Locations</h3><p>Where job records are concentrated</p></div><span class="chart-tag">TOP 10</span></div><div class="canvas-wrap"><canvas id="locationsChart" aria-label="Top locations chart"></canvas></div></article>
+      <article class="chart-card wide"><div class="chart-header"><div><h3>Most In-Demand Skills</h3><p>Number of job records containing each normalized skill</p></div><span class="chart-tag">TOP 12</span></div><div class="canvas-wrap"><canvas id="skillsChart" aria-label="Top skills chart"></canvas></div></article>
+      <article class="chart-card"><div class="chart-header"><div><h3>Salary Information Coverage</h3><p>How often both salary boundaries are available</p></div><span class="chart-tag">COVERAGE</span></div><div class="canvas-wrap"><canvas id="salaryChart" aria-label="Salary coverage chart"></canvas></div></article>
+      <article class="chart-card"><div class="chart-header"><div><h3>Dataset Snapshot</h3><p>Quick interpretation of the current selection</p></div><span class="chart-tag">SUMMARY</span></div><div style="padding:10px 2px;line-height:1.9;font-size:13px;color:#53617b">This dashboard is based on the JobOptic job-market dataset stored in the connected database. Charts update when you apply title or location filters. Salary coverage means both minimum and maximum salary values are greater than zero; it does not imply every listing discloses salary in the same format.</div></article>
+    </section>
+    <p class="footer-note">JobOptic Insights · Academic project · Dataset-based analysis, not live job listings. Figures reflect the records stored in the connected database.</p>
+  </main>
+  <script>
+    const roleLabels = {{ role_labels | tojson }};
+    const roleValues = {{ role_values | tojson }};
+    const locationLabels = {{ location_labels | tojson }};
+    const locationValues = {{ location_values | tojson }};
+    const skillLabels = {{ skill_labels | tojson }};
+    const skillValues = {{ skill_values | tojson }};
+    const salaryKnown = {{ salary_listings | tojson }};
+    const salaryUnknown = {{ (total_jobs - salary_listings) | tojson }};
+    const gridColor = '#edf0f6';
+    const tickColor = '#748099';
+    function makeBar(id, labels, values, horizontal=false){
+      const node = document.getElementById(id);
+      new Chart(node, {type:'bar',data:{labels,datasets:[{label:'Job records',data:values,backgroundColor:['#3b67f2','#19a77b','#8b5cf6','#f4a340','#4ca7c9','#ed6b8b','#6a7de1','#66bba6','#c58aef','#8f9db7','#f28f67','#5496f2'],borderRadius:6,borderSkipped:false,maxBarThickness:horizontal?22:38}]},options:{indexAxis:horizontal?'y':'x',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#111b35',padding:11}},scales:{x:{grid:{display:!horizontal,color:gridColor},ticks:{color:tickColor,font:{size:10},maxRotation:horizontal?0:40,minRotation:0}},y:{beginAtZero:true,grid:{display:horizontal,color:gridColor},ticks:{color:tickColor,font:{size:10}},border:{display:false}}}}});
+    }
+    makeBar('rolesChart', roleLabels, roleValues, true);
+    makeBar('locationsChart', locationLabels, locationValues, true);
+    makeBar('skillsChart', skillLabels, skillValues, true);
+    new Chart(document.getElementById('salaryChart'),{type:'doughnut',data:{labels:['Salary bounds available','Not available / incomplete'],datasets:[{data:[salaryKnown,salaryUnknown],backgroundColor:['#18a778','#e9edf5'],borderWidth:0,hoverOffset:5}]},options:{responsive:true,maintainAspectRatio:false,cutout:'68%',plugins:{legend:{position:'bottom',labels:{color:tickColor,usePointStyle:true,pointStyle:'circle',padding:18,font:{size:11}}},tooltip:{backgroundColor:'#111b35',padding:11}}}});
+  </script>
+</body>
+</html>

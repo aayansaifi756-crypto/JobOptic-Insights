@@ -1,0 +1,1727 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Skill Gap Analyzer - JobOptic Insights</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f7fb;
+            color: #222;
+        }
+
+        /* ================= NAVBAR ================= */
+
+        .navbar {
+            background: #1f2937;
+            color: white;
+            padding: 18px 40px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-size: 15px;
+        }
+
+        .nav-link:hover {
+            color: #60a5fa;
+        }
+
+        /* ================= MAIN ================= */
+
+        .container {
+            width: 90%;
+            max-width: 1050px;
+            margin: 40px auto;
+        }
+
+        .page-title {
+            margin-bottom: 25px;
+        }
+
+        .page-title h1 {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .page-title p {
+            color: #666;
+        }
+
+        /* ================= CARD ================= */
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 14px;
+
+            box-shadow:
+                0 4px 15px rgba(0, 0, 0, 0.08);
+
+            margin-bottom: 25px;
+        }
+
+        /* ================= FORM ================= */
+
+        .form-group {
+            margin-bottom: 30px;
+        }
+
+        .title-label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        select,
+        input[type="text"] {
+            width: 100%;
+            padding: 13px 15px;
+
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+
+            font-size: 15px;
+            background: white;
+        }
+
+        /* ================= SEARCH ================= */
+
+        .search-label {
+            display: block;
+
+            margin-top: 15px;
+            margin-bottom: 8px;
+
+            font-size: 14px;
+            color: #555;
+            font-weight: bold;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-icon {
+            position: absolute;
+
+            left: 14px;
+            top: 50%;
+
+            transform: translateY(-50%);
+
+            color: #6b7280;
+
+            pointer-events: none;
+        }
+
+        .search-box input {
+            padding-left: 42px;
+        }
+
+        /* ================= JOB SEARCH RESULTS ================= */
+
+        .search-results {
+            display: none;
+
+            margin-top: 8px;
+
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+
+            background: white;
+
+            max-height: 280px;
+            overflow-y: auto;
+
+            box-shadow:
+                0 4px 12px rgba(0, 0, 0, 0.08);
+
+            position: relative;
+            z-index: 10;
+        }
+
+        .search-result-item {
+            padding: 12px 14px;
+
+            cursor: pointer;
+
+            border-bottom:
+                1px solid #f0f0f0;
+        }
+
+        .search-result-item:last-child {
+            border-bottom: none;
+        }
+
+        .search-result-item:hover {
+            background: #eff6ff;
+        }
+
+        .job-result-title {
+            font-weight: bold;
+            color: #222;
+        }
+
+        .job-result-count {
+            display: block;
+
+            margin-top: 4px;
+
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .search-message {
+            padding: 13px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .selected-role {
+            display: none;
+
+            margin-top: 10px;
+
+            padding: 10px 12px;
+
+            background: #eff6ff;
+            color: #1d4ed8;
+
+            border-radius: 8px;
+
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        /* ================= SKILL SEARCH ================= */
+
+        .skill-search {
+            margin-bottom: 15px;
+        }
+
+        .skills-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 10px;
+
+            max-height: 420px;
+            overflow-y: auto;
+
+            padding: 5px;
+        }
+
+        .skill-option {
+            border: 1px solid #d1d5db;
+
+            border-radius: 8px;
+
+            padding: 11px;
+
+            background: #f8fafc;
+        }
+
+        .skill-option:hover {
+            background: #eef2ff;
+        }
+
+        .skill-option label {
+            display: flex;
+
+            gap: 8px;
+
+            align-items: center;
+
+            cursor: pointer;
+
+            font-weight: normal;
+
+            font-size: 14px;
+        }
+
+        /* ================= MANUAL SKILL ================= */
+
+        .manual-skill-box {
+            margin-top: 18px;
+
+            padding: 15px;
+
+            background: #f8fafc;
+
+            border-radius: 10px;
+        }
+
+        .manual-skill-box p {
+            font-size: 14px;
+            color: #666;
+
+            margin-bottom: 10px;
+        }
+
+        .manual-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .manual-row input {
+            flex: 1;
+        }
+
+        .add-button {
+            padding: 12px 18px;
+
+            border: none;
+            border-radius: 8px;
+
+            background: #059669;
+            color: white;
+
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .add-button:hover {
+            background: #047857;
+        }
+
+        /* ================= SELECTED SKILLS ================= */
+
+        .selected-skills {
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 8px;
+
+            margin-top: 15px;
+        }
+
+        .selected-skill-tag {
+            background: #dbeafe;
+            color: #1d4ed8;
+
+            padding: 7px 11px;
+
+            border-radius: 20px;
+
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        /* ================= ANALYZE BUTTON ================= */
+
+        .analyze-button {
+            width: 100%;
+
+            padding: 14px;
+
+            border: none;
+
+            border-radius: 8px;
+
+            background: #2563eb;
+            color: white;
+
+            font-size: 16px;
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        .analyze-button:hover {
+            background: #1d4ed8;
+        }
+
+        /* ================= RESULT ================= */
+
+        .result-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .target-info {
+            margin-bottom: 20px;
+        }
+
+        .match-title {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 12px;
+        }
+
+        .match-title strong {
+            font-size: 28px;
+        }
+
+        .match-bar {
+            width: 100%;
+
+            height: 16px;
+
+            background: #e5e7eb;
+
+            border-radius: 20px;
+
+            overflow: hidden;
+
+            margin-bottom: 25px;
+        }
+
+        .match-fill {
+            height: 100%;
+
+            width: var(--match-width);
+
+            background: #2563eb;
+
+            border-radius: 20px;
+        }
+
+        .result-section {
+            margin-top: 25px;
+        }
+
+        .result-section h3 {
+            margin-bottom: 12px;
+        }
+
+        .result-section ul {
+            padding-left: 20px;
+        }
+
+        .result-section li {
+            margin-bottom: 8px;
+        }
+
+        .tag {
+            display: inline-block;
+
+            padding: 8px 12px;
+
+            margin: 5px;
+
+            border-radius: 20px;
+
+            font-weight: bold;
+        }
+
+        .matched {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .missing {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .message {
+            padding: 15px;
+
+            border-radius: 8px;
+
+            background: #eff6ff;
+
+            color: #1e40af;
+
+            margin-top: 10px;
+        }
+
+        /* ================= FOOTER ================= */
+
+        footer {
+            text-align: center;
+
+            padding: 30px;
+
+            color: #777;
+        }
+
+        /* ================= MOBILE ================= */
+
+        @media (max-width: 850px) {
+
+            .skills-grid {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+            .navbar {
+                padding: 15px 20px;
+            }
+
+            .nav-menu {
+                gap: 12px;
+            }
+        }
+
+        @media (max-width: 550px) {
+
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .manual-row {
+                flex-direction: column;
+            }
+
+            .container {
+                width: 94%;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+
+    <div class="navbar">
+
+        <div class="logo">
+            📊 JobOptic Insights
+        </div>
+
+        <div class="nav-menu">
+
+            <a
+                href="/"
+                class="nav-link"
+            >
+                Home
+            </a>
+
+            <a
+                href="/analysis"
+                class="nav-link"
+            >
+                Analysis
+            </a>
+
+            <a
+                href="/skill-gap"
+                class="nav-link"
+            >
+                Skill Gap
+            </a>
+
+            <a
+                href="/job-explorer"
+                class="nav-link"
+            >
+                Job Explorer
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <div class="container">
+
+        <div class="page-title">
+
+            <h1>
+                🎯 Skill Gap Analyzer
+            </h1>
+
+            <p>
+                Select a job title and your existing skills
+                to identify important missing skills.
+            </p>
+
+        </div>
+
+
+        <!-- ================= FORM ================= -->
+
+        <div class="card">
+
+            <form
+                method="POST"
+                id="skillGapForm"
+            >
+
+                <!-- ================= JOB TITLE ================= -->
+
+                <div class="form-group">
+
+                    <label
+                        for="target_role"
+                        class="title-label"
+                    >
+                        Select Target Job Title
+                    </label>
+
+
+                    <!-- Popular dropdown -->
+
+                    <select
+                        id="target_role"
+                        name="target_role"
+                        required
+                    >
+
+                        <option value="">
+                            -- Select Popular Job Title --
+                        </option>
+
+                        {% for role in roles %}
+
+                            <option
+                                value="{{ role }}"
+                                {% if result and result.target_role == role %}
+                                    selected
+                                {% endif %}
+                            >
+                                {{ role }}
+                            </option>
+
+                        {% endfor %}
+
+                    </select>
+
+
+                    <!-- Search -->
+
+                    <label
+                        class="search-label"
+                        for="jobRoleSearch"
+                    >
+                        Or search any job title
+                    </label>
+
+
+                    <div class="search-box">
+
+                        <span class="search-icon">
+                            🔎
+                        </span>
+
+                        <input
+                            type="text"
+                            id="jobRoleSearch"
+                            placeholder="Type a job title, e.g. Data Analyst"
+                            autocomplete="off"
+                        >
+
+                    </div>
+
+
+                    <div
+                        id="jobRoleResults"
+                        class="search-results"
+                    >
+                    </div>
+
+
+                    <div
+                        id="selectedRoleMessage"
+                        class="selected-role"
+                    >
+                    </div>
+
+                </div>
+
+
+                <!-- ================= SKILLS ================= -->
+
+                <div class="form-group">
+
+                    <label class="title-label">
+                        Select Your Existing Skills
+                    </label>
+
+
+                    <!-- Skill search -->
+
+                    <div class="search-box skill-search">
+
+                        <span class="search-icon">
+                            🔎
+                        </span>
+
+                        <input
+                            type="text"
+                            id="skillSearch"
+                            placeholder="Search a skill, e.g. Python, SQL, Excel..."
+                            autocomplete="off"
+                        >
+
+                    </div>
+
+
+                    <!-- Skill checkboxes -->
+
+                    <div
+                        class="skills-grid"
+                        id="skillsGrid"
+                    >
+
+                        {% for skill in all_skills %}
+
+                            <div
+                                class="skill-option"
+                                data-skill="{{ skill|lower }}"
+                            >
+
+                                <label>
+
+                                    <input
+                                        type="checkbox"
+                                        name="skills"
+                                        value="{{ skill }}"
+                                        {% if result and skill in result.matched_skills %}
+                                            checked
+                                        {% endif %}
+                                    >
+
+                                    {{ skill }}
+
+                                </label>
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+
+                    <!-- Manual skill -->
+
+                    <div class="manual-skill-box">
+
+                        <p>
+                            Skill not shown above? Add it manually.
+                        </p>
+
+                        <div class="manual-row">
+
+                            <input
+                                type="text"
+                                id="manualSkill"
+                                placeholder="Type your skill, e.g. Power Query"
+                            >
+
+                            <button
+                                type="button"
+                                class="add-button"
+                                id="addSkillButton"
+                            >
+                                + Add Skill
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Selected skills -->
+
+                    <div
+                        class="selected-skills"
+                        id="selectedSkills"
+                    >
+                    </div>
+
+                </div>
+
+
+                <!-- ================= ANALYZE ================= -->
+
+                <button
+                    type="submit"
+                    class="analyze-button"
+                >
+                    Analyze Skill Gap
+                </button>
+
+            </form>
+
+        </div>
+
+
+        <!-- ================= RESULT ================= -->
+
+        {% if result %}
+
+        <div class="card">
+
+            <h2 class="result-title">
+                📊 Skill Gap Result
+            </h2>
+
+
+            <div class="target-info">
+
+                <strong>
+                    Target Job Title:
+                </strong>
+
+                {{ result.target_role }}
+
+            </div>
+
+
+            <!-- MATCH -->
+
+            <div class="match-title">
+
+                <span>
+                    Skill Match
+                </span>
+
+                <strong>
+                    {{ result.match_percentage }}%
+                </strong>
+
+            </div>
+
+
+            <div class="match-bar">
+
+                <div
+                    class="match-fill"
+                    style="--match-width: {{ result.match_percentage }}%;"
+                >
+                </div>
+
+            </div>
+
+
+            <!-- REQUIRED SKILLS -->
+
+            <div class="result-section">
+
+                <h3>
+                    Required Skills
+                </h3>
+
+                {% if result.required_skills %}
+
+                    {% for skill in result.required_skills %}
+
+                        <span class="tag">
+                            {{ skill }}
+                        </span>
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <p>
+                        No required skills found.
+                    </p>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- MATCHED -->
+
+            <div class="result-section">
+
+                <h3>
+                    ✅ Matched Skills
+                </h3>
+
+                {% if result.matched_skills %}
+
+                    {% for skill in result.matched_skills %}
+
+                        <span class="tag matched">
+                            {{ skill }}
+                        </span>
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <p>
+                        No matched skills.
+                    </p>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- MISSING -->
+
+            <div class="result-section">
+
+                <h3>
+                    ❌ Missing Skills
+                </h3>
+
+                {% if result.missing_skills %}
+
+                    {% for skill in result.missing_skills %}
+
+                        <span class="tag missing">
+                            {{ skill }}
+                        </span>
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <p>
+                        No missing skills.
+                    </p>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- RECOMMENDED -->
+
+            <div class="result-section">
+
+                <h3>
+                    🎯 Recommended Skills to Learn
+                </h3>
+
+                {% if result.recommended_skills %}
+
+                    <ul>
+
+                        {% for skill in result.recommended_skills %}
+
+                            <li>
+                                {{ skill }}
+                            </li>
+
+                        {% endfor %}
+
+                    </ul>
+
+                {% else %}
+
+                    <div class="message">
+                        You already have all the important
+                        skills considered for this job title.
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- DEMAND -->
+
+            <div class="result-section">
+
+                <h3>
+                    📈 Skill Demand Frequency
+                </h3>
+
+                {% if result.skill_demand %}
+
+                    <ul>
+
+                        {% for skill, count in result.skill_demand.items() %}
+
+                            <li>
+
+                                <strong>
+                                    {{ skill }}
+                                </strong>
+
+                                — Required in
+                                {{ count }}
+                                jobs
+
+                            </li>
+
+                        {% endfor %}
+
+                    </ul>
+
+                {% else %}
+
+                    <p>
+                        No skill demand data available.
+                    </p>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer>
+
+        JobOptic Insights © 2026 |
+        Job Market & Skill Demand Analyzer
+
+    </footer>
+
+
+    <!-- ================= JAVASCRIPT ================= -->
+
+    <script>
+
+        /* ==================================================
+           JOB TITLE SEARCH
+           ================================================== */
+
+        const jobSearch =
+            document.getElementById("jobRoleSearch");
+
+        const jobResults =
+            document.getElementById("jobRoleResults");
+
+        const roleSelect =
+            document.getElementById("target_role");
+
+        const selectedRoleMessage =
+            document.getElementById("selectedRoleMessage");
+
+        let searchTimer;
+
+
+        /* --------------------------------------------------
+           Normalise API result
+           Supports:
+           1. {title, count}
+           2. "Data Analyst"
+           -------------------------------------------------- */
+
+        function normalizeJobResult(item) {
+
+            if (typeof item === "string") {
+
+                return {
+                    title: item,
+                    count: null
+                };
+
+            }
+
+            return {
+                title: item.title || "",
+                count: item.count ?? null
+            };
+        }
+
+
+        /* --------------------------------------------------
+           Escape HTML
+           -------------------------------------------------- */
+
+        function escapeHtml(text) {
+
+            const div =
+                document.createElement("div");
+
+            div.textContent = text;
+
+            return div.innerHTML;
+        }
+
+
+        /* --------------------------------------------------
+           Search input
+           -------------------------------------------------- */
+
+        jobSearch.addEventListener(
+            "input",
+            function () {
+
+                clearTimeout(searchTimer);
+
+                const query =
+                    this.value.trim();
+
+
+                if (query.length < 2) {
+
+                    jobResults.innerHTML = "";
+
+                    jobResults.style.display = "none";
+
+                    selectedRoleMessage.style.display =
+                        "none";
+
+                    return;
+                }
+
+
+                searchTimer =
+                    setTimeout(
+                        function () {
+
+                            fetch(
+                                "/api/job-titles?q="
+                                + encodeURIComponent(query)
+                            )
+
+                            .then(
+                                function (response) {
+
+                                    if (!response.ok) {
+
+                                        throw new Error(
+                                            "Search request failed"
+                                        );
+
+                                    }
+
+                                    return response.json();
+
+                                }
+                            )
+
+                            .then(
+                                function (data) {
+
+                                    jobResults.innerHTML = "";
+
+
+                                    if (
+                                        !Array.isArray(data)
+                                        || data.length === 0
+                                    ) {
+
+                                        jobResults.innerHTML = `
+                                            <div class="search-message">
+                                                No matching job titles found.
+                                            </div>
+                                        `;
+
+                                        jobResults.style.display =
+                                            "block";
+
+                                        return;
+                                    }
+
+
+                                    data.forEach(
+                                        function (rawItem) {
+
+                                            const result =
+                                                normalizeJobResult(
+                                                    rawItem
+                                                );
+
+
+                                            if (!result.title) {
+                                                return;
+                                            }
+
+
+                                            const item =
+                                                document.createElement(
+                                                    "div"
+                                                );
+
+
+                                            item.className =
+                                                "search-result-item";
+
+
+                                            const titleDiv =
+                                                document.createElement(
+                                                    "div"
+                                                );
+
+
+                                            titleDiv.className =
+                                                "job-result-title";
+
+
+                                            titleDiv.textContent =
+                                                result.title;
+
+
+                                            item.appendChild(
+                                                titleDiv
+                                            );
+
+
+                                            if (
+                                                result.count !== null
+                                            ) {
+
+                                                const countDiv =
+                                                    document.createElement(
+                                                        "span"
+                                                    );
+
+
+                                                countDiv.className =
+                                                    "job-result-count";
+
+
+                                                countDiv.textContent =
+                                                    result.count
+                                                    + " job"
+                                                    + (
+                                                        result.count === 1
+                                                        ? ""
+                                                        : "s"
+                                                    );
+
+
+                                                item.appendChild(
+                                                    countDiv
+                                                );
+                                            }
+
+
+                                            item.addEventListener(
+                                                "click",
+                                                function () {
+
+                                                    const title =
+                                                        result.title;
+
+
+                                                    /*
+                                                     * Check if title
+                                                     * already exists
+                                                     */
+
+                                                    let option =
+                                                        Array.from(
+                                                            roleSelect.options
+                                                        ).find(
+                                                            function (opt) {
+
+                                                                return (
+                                                                    opt.value
+                                                                    === title
+                                                                );
+
+                                                            }
+                                                        );
+
+
+                                                    /*
+                                                     * If searched
+                                                     * title isn't in
+                                                     * popular dropdown,
+                                                     * add it.
+                                                     */
+
+                                                    if (!option) {
+
+                                                        option =
+                                                            document.createElement(
+                                                                "option"
+                                                            );
+
+                                                        option.value =
+                                                            title;
+
+                                                        option.textContent =
+                                                            title;
+
+                                                        roleSelect.appendChild(
+                                                            option
+                                                        );
+
+                                                    }
+
+
+                                                    /*
+                                                     * Select title
+                                                     */
+
+                                                    roleSelect.value =
+                                                        title;
+
+
+                                                    /*
+                                                     * Update search box
+                                                     */
+
+                                                    jobSearch.value =
+                                                        title;
+
+
+                                                    /*
+                                                     * Show selected
+                                                     * title
+                                                     */
+
+                                                    selectedRoleMessage.textContent =
+                                                        result.count !== null
+                                                        ? "Selected: "
+                                                            + title
+                                                            + " ("
+                                                            + result.count
+                                                            + " jobs)"
+                                                        : "Selected: "
+                                                            + title;
+
+
+                                                    selectedRoleMessage.style.display =
+                                                        "block";
+
+
+                                                    /*
+                                                     * Close result box
+                                                     */
+
+                                                    jobResults.innerHTML =
+                                                        "";
+
+                                                    jobResults.style.display =
+                                                        "none";
+
+                                                }
+                                            );
+
+
+                                            jobResults.appendChild(
+                                                item
+                                            );
+
+                                        }
+                                    );
+
+
+                                    jobResults.style.display =
+                                        "block";
+
+                                }
+                            )
+
+                            .catch(
+                                function () {
+
+                                    jobResults.innerHTML = `
+                                        <div class="search-message">
+                                            Unable to search job titles.
+                                            Please check that Flask is running.
+                                        </div>
+                                    `;
+
+                                    jobResults.style.display =
+                                        "block";
+
+                                }
+                            );
+
+                        },
+                        300
+                    );
+
+            }
+        );
+
+
+        /* ==================================================
+           DROPDOWN CHANGE
+           ================================================== */
+
+        roleSelect.addEventListener(
+            "change",
+            function () {
+
+                if (this.value) {
+
+                    jobSearch.value =
+                        this.value;
+
+                    selectedRoleMessage.textContent =
+                        "Selected: "
+                        + this.value;
+
+                    selectedRoleMessage.style.display =
+                        "block";
+
+                } else {
+
+                    jobSearch.value = "";
+
+                    selectedRoleMessage.style.display =
+                        "none";
+                }
+
+            }
+        );
+
+
+        /* ==================================================
+           SKILL SEARCH
+           ================================================== */
+
+        const skillSearch =
+            document.getElementById("skillSearch");
+
+        const skillsGrid =
+            document.getElementById("skillsGrid");
+
+
+        function filterSkills() {
+
+            const query =
+                skillSearch.value
+                    .trim()
+                    .toLowerCase();
+
+
+            const skillOptions =
+                skillsGrid.querySelectorAll(
+                    ".skill-option"
+                );
+
+
+            skillOptions.forEach(
+                function (option) {
+
+                    const skill =
+                        option.dataset.skill || "";
+
+
+                    if (
+                        skill.includes(query)
+                    ) {
+
+                        option.style.display =
+                            "block";
+
+                    } else {
+
+                        option.style.display =
+                            "none";
+                    }
+
+                }
+            );
+
+        }
+
+
+        skillSearch.addEventListener(
+            "input",
+            filterSkills
+        );
+
+
+        /* ==================================================
+           MANUAL SKILL
+           ================================================== */
+
+        const manualSkill =
+            document.getElementById(
+                "manualSkill"
+            );
+
+        const addSkillButton =
+            document.getElementById(
+                "addSkillButton"
+            );
+
+
+        addSkillButton.addEventListener(
+            "click",
+            function () {
+
+                const rawSkill =
+                    manualSkill.value.trim();
+
+
+                if (!rawSkill) {
+                    return;
+                }
+
+
+                /*
+                 * Check whether skill already exists
+                 */
+
+                const existing =
+                    Array.from(
+                        skillsGrid.querySelectorAll(
+                            'input[name="skills"]'
+                        )
+                    ).find(
+                        function (checkbox) {
+
+                            return (
+                                checkbox.value
+                                    .trim()
+                                    .toLowerCase()
+                                ===
+                                rawSkill
+                                    .toLowerCase()
+                            );
+
+                        }
+                    );
+
+
+                if (existing) {
+
+                    existing.checked = true;
+
+                    manualSkill.value = "";
+
+                    updateSelectedSkills();
+
+                    return;
+                }
+
+
+                /*
+                 * Create new skill option safely
+                 */
+
+                const wrapper =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                wrapper.className =
+                    "skill-option";
+
+
+                wrapper.dataset.skill =
+                    rawSkill.toLowerCase();
+
+
+                const label =
+                    document.createElement(
+                        "label"
+                    );
+
+
+                const checkbox =
+                    document.createElement(
+                        "input"
+                    );
+
+
+                checkbox.type =
+                    "checkbox";
+
+                checkbox.name =
+                    "skills";
+
+                checkbox.value =
+                    rawSkill;
+
+                checkbox.checked =
+                    true;
+
+
+                label.appendChild(
+                    checkbox
+                );
+
+
+                label.appendChild(
+                    document.createTextNode(
+                        " " + rawSkill
+                    )
+                );
+
+
+                wrapper.appendChild(
+                    label
+                );
+
+
+                skillsGrid.prepend(
+                    wrapper
+                );
+
+
+                manualSkill.value = "";
+
+                updateSelectedSkills();
+
+                filterSkills();
+
+            }
+        );
+
+
+        /*
+         * Press Enter in manual skill box
+         */
+
+        manualSkill.addEventListener(
+            "keydown",
+            function (event) {
+
+                if (
+                    event.key === "Enter"
+                ) {
+
+                    event.preventDefault();
+
+                    addSkillButton.click();
+
+                }
+
+            }
+        );
+
+
+        /* ==================================================
+           SELECTED SKILLS DISPLAY
+           ================================================== */
+
+        const selectedSkills =
+            document.getElementById(
+                "selectedSkills"
+            );
+
+
+        function updateSelectedSkills() {
+
+            selectedSkills.innerHTML = "";
+
+
+            const checked =
+                document.querySelectorAll(
+                    'input[name="skills"]:checked'
+                );
+
+
+            checked.forEach(
+                function (checkbox) {
+
+                    const tag =
+                        document.createElement(
+                            "span"
+                        );
+
+
+                    tag.className =
+                        "selected-skill-tag";
+
+
+                    tag.textContent =
+                        checkbox.value;
+
+
+                    selectedSkills.appendChild(
+                        tag
+                    );
+
+                }
+            );
+
+        }
+
+
+        /*
+         * Detect checkbox changes,
+         * including dynamically added skills.
+         */
+
+        document.addEventListener(
+            "change",
+            function (event) {
+
+                if (
+                    event.target.matches(
+                        'input[name="skills"]'
+                    )
+                ) {
+
+                    updateSelectedSkills();
+
+                }
+
+            }
+        );
+
+
+        /* ==================================================
+           CLOSE SEARCH WHEN CLICKING OUTSIDE
+           ================================================== */
+
+        document.addEventListener(
+            "click",
+            function (event) {
+
+                if (
+                    !event.target.closest(
+                        ".search-box"
+                    )
+                    &&
+                    !event.target.closest(
+                        "#jobRoleResults"
+                    )
+                ) {
+
+                    jobResults.style.display =
+                        "none";
+
+                }
+
+            }
+        );
+
+
+        /* ==================================================
+           INITIAL LOAD
+           ================================================== */
+
+        updateSelectedSkills();
+
+    </script>
+
+</body>
+
+</html>

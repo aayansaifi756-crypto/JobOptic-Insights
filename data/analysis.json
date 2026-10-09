@@ -1,0 +1,26 @@
+{
+    "total_jobs": 20,
+    "job_roles": 4,
+    "locations": 3,
+    "experience": {
+        "1-2": 9,
+        "0-1": 7,
+        "2-3": 4
+    },
+    "top_skills": {
+        "SQL": 20,
+        "Python": 14,
+        "Excel": 13,
+        "Power BI": 8,
+        "AWS": 4,
+        "Statistics": 3,
+        "Tableau": 3,
+        "ETL": 3,
+        "MySQL": 3,
+        "Spark": 2,
+        "Communication": 2,
+        "Database": 2,
+        "Azure": 1,
+        "DBMS": 1
+    }
+}

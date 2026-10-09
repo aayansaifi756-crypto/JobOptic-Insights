@@ -1,0 +1,1506 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Job Explorer - JobOptic Insights</title>
+
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+
+        body {
+            background: #f4f7fb;
+            color: #222;
+        }
+
+
+        /* ================= NAVBAR ================= */
+
+        .navbar {
+            background: #1f2937;
+            color: white;
+
+            padding: 18px 40px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+
+        .nav-menu {
+            display: flex;
+            gap: 25px;
+        }
+
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-size: 15px;
+        }
+
+
+        .nav-link:hover {
+            color: #60a5fa;
+        }
+
+
+        /* ================= MAIN ================= */
+
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            margin: 35px auto;
+        }
+
+
+        .page-title {
+            margin-bottom: 25px;
+        }
+
+
+        .page-title h1 {
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+
+        .page-title p {
+            color: #666;
+            line-height: 1.5;
+        }
+
+
+        /* ================= CARD ================= */
+
+        .card {
+            background: white;
+
+            padding: 30px;
+
+            border-radius: 14px;
+
+            box-shadow:
+                0 3px 12px
+                rgba(0, 0, 0, 0.08);
+
+            margin-bottom: 25px;
+        }
+
+
+        /* ================= FORM ================= */
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+
+        .form-group label {
+            display: block;
+
+            font-weight: bold;
+
+            margin-bottom: 9px;
+        }
+
+
+        select,
+        input[type="text"] {
+
+            width: 100%;
+
+            padding: 13px 15px;
+
+            border: 1px solid #d1d5db;
+
+            border-radius: 8px;
+
+            font-size: 15px;
+
+            background: white;
+
+            outline: none;
+        }
+
+
+        select:focus,
+        input[type="text"]:focus {
+
+            border-color: #2563eb;
+        }
+
+
+        /* ================= SEARCH ================= */
+
+        .search-label {
+
+            display: block;
+
+            font-size: 14px;
+
+            color: #555;
+
+            font-weight: bold;
+
+            margin-top: 14px;
+
+            margin-bottom: 8px;
+        }
+
+
+        .search-box {
+
+            position: relative;
+        }
+
+
+        .search-icon {
+
+            position: absolute;
+
+            left: 14px;
+
+            top: 50%;
+
+            transform: translateY(-50%);
+
+            color: #6b7280;
+
+            z-index: 2;
+        }
+
+
+        .search-box input {
+
+            padding-left: 42px;
+        }
+
+
+        /* ================= SEARCH RESULTS ================= */
+
+        .search-results {
+
+            margin-top: 7px;
+
+            border: 1px solid #d1d5db;
+
+            border-radius: 8px;
+
+            background: white;
+
+            max-height: 230px;
+
+            overflow-y: auto;
+
+            display: none;
+
+            box-shadow:
+                0 4px 12px
+                rgba(0, 0, 0, 0.08);
+
+            position: relative;
+
+            z-index: 20;
+        }
+
+
+        .search-result-item {
+
+            padding: 12px 14px;
+
+            cursor: pointer;
+
+            border-bottom:
+                1px solid #f0f0f0;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            gap: 12px;
+        }
+
+
+        .search-result-item:last-child {
+
+            border-bottom: none;
+        }
+
+
+        .search-result-item:hover {
+
+            background: #eff6ff;
+        }
+
+
+        .result-main {
+
+            font-weight: 500;
+
+            line-height: 1.4;
+        }
+
+
+        .result-count {
+
+            color: #2563eb;
+
+            font-size: 13px;
+
+            font-weight: bold;
+
+            white-space: nowrap;
+        }
+
+
+        .search-message {
+
+            padding: 12px 14px;
+
+            color: #666;
+
+            font-size: 14px;
+        }
+
+
+        /* ================= SELECTED ================= */
+
+        .selected-box {
+
+            margin-top: 9px;
+
+            padding: 10px 12px;
+
+            background: #eff6ff;
+
+            color: #1d4ed8;
+
+            border-radius: 8px;
+
+            font-size: 14px;
+
+            font-weight: bold;
+
+            display: none;
+        }
+
+
+        /* ================= SEARCH BUTTON ================= */
+
+        .search-button {
+
+            width: 100%;
+
+            padding: 14px;
+
+            border: none;
+
+            border-radius: 8px;
+
+            background: #2563eb;
+
+            color: white;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+        }
+
+
+        .search-button:hover {
+
+            background: #1d4ed8;
+        }
+
+
+        /* ================= RESULTS ================= */
+
+        .result-heading {
+
+            font-size: 22px;
+
+            margin-bottom: 18px;
+        }
+
+
+        .result-summary {
+
+            margin-bottom: 20px;
+
+            padding: 12px 15px;
+
+            background: #f8fafc;
+
+            border-radius: 8px;
+
+            color: #555;
+
+        }
+
+
+        .job-card {
+
+            border: 1px solid #e5e7eb;
+
+            border-radius: 10px;
+
+            padding: 20px;
+
+            margin-bottom: 15px;
+
+            background: white;
+        }
+
+
+        .job-title {
+
+            font-size: 19px;
+
+            font-weight: bold;
+
+            color: #111827;
+
+            margin-bottom: 8px;
+        }
+
+
+        .company {
+
+            font-size: 15px;
+
+            font-weight: bold;
+
+            color: #374151;
+
+            margin-bottom: 12px;
+        }
+
+
+        .job-info {
+
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 10px;
+
+            margin-bottom: 12px;
+        }
+
+
+        .info-tag {
+
+            background: #f3f4f6;
+
+            padding: 7px 10px;
+
+            border-radius: 6px;
+
+            font-size: 13px;
+
+            color: #374151;
+        }
+
+
+        .job-skills {
+
+            color: #555;
+
+            font-size: 14px;
+
+            line-height: 1.6;
+        }
+
+
+        .no-results {
+
+            padding: 20px;
+
+            background: #fff7ed;
+
+            border-radius: 8px;
+
+            color: #9a3412;
+
+            text-align: center;
+        }
+
+
+        /* ================= FOOTER ================= */
+
+        footer {
+
+            text-align: center;
+
+            padding: 30px;
+
+            color: #777;
+
+            font-size: 14px;
+        }
+
+
+        /* ================= MOBILE ================= */
+
+        @media (max-width: 768px) {
+
+            .navbar {
+
+                padding: 15px 20px;
+
+                flex-direction: column;
+
+                gap: 15px;
+            }
+
+
+            .nav-menu {
+
+                gap: 15px;
+
+                flex-wrap: wrap;
+
+                justify-content: center;
+            }
+
+
+            .container {
+
+                width: 94%;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- ================= NAVBAR ================= -->
+
+    <div class="navbar">
+
+        <div class="logo">
+            📊 JobOptic Insights
+        </div>
+
+
+        <div class="nav-menu">
+
+            <a
+                href="/"
+                class="nav-link"
+            >
+                Home
+            </a>
+
+
+            <a
+                href="/analysis"
+                class="nav-link"
+            >
+                Analysis
+            </a>
+
+
+            <a
+                href="/skill-gap"
+                class="nav-link"
+            >
+                Skill Gap
+            </a>
+
+
+            <a
+                href="/job-explorer"
+                class="nav-link"
+            >
+                Job Explorer
+            </a>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ================= MAIN ================= -->
+
+    <div class="container">
+
+
+        <div class="page-title">
+
+            <h1>
+                🔎 Job Explorer
+            </h1>
+
+            <p>
+                Search and explore available jobs by
+                job title, location and experience.
+            </p>
+
+        </div>
+
+
+
+        <!-- ================= FILTER CARD ================= -->
+
+        <div class="card">
+
+
+            <!-- ================= JOB TITLE ================= -->
+
+            <div class="form-group">
+
+                <label for="role">
+                    Job Title
+                </label>
+
+
+                <select id="role">
+
+                    <option value="">
+                        -- Select Popular Job Title --
+                    </option>
+
+
+                    {% for item in roles %}
+
+                        <option
+                            value="{{ item }}"
+                            {% if selected_role == item %}
+                                selected
+                            {% endif %}
+                        >
+                            {{ item }}
+                        </option>
+
+                    {% endfor %}
+
+                </select>
+
+
+
+                <!-- SEARCH JOB TITLE -->
+
+                <label
+                    class="search-label"
+                    for="jobTitleSearch"
+                >
+                    Or search any job title
+                </label>
+
+
+                <div class="search-box">
+
+                    <span class="search-icon">
+                        🔎
+                    </span>
+
+
+                    <input
+                        type="text"
+                        id="jobTitleSearch"
+                        placeholder="e.g. Data Analyst, Java Developer..."
+                        autocomplete="off"
+                    >
+
+                </div>
+
+
+                <div
+                    id="jobTitleResults"
+                    class="search-results"
+                >
+                </div>
+
+
+                <div
+                    id="selectedRole"
+                    class="selected-box"
+                >
+                </div>
+
+            </div>
+
+
+
+            <!-- ================= LOCATION ================= -->
+
+            <div class="form-group">
+
+                <label for="location">
+                    Location
+                </label>
+
+
+                <select id="location">
+
+                    <option value="">
+                        -- Select Popular Location --
+                    </option>
+
+
+                    {% for item in locations %}
+
+                        <option
+                            value="{{ item }}"
+                            {% if selected_location == item %}
+                                selected
+                            {% endif %}
+                        >
+                            {{ item }}
+                        </option>
+
+                    {% endfor %}
+
+                </select>
+
+
+
+                <!-- SEARCH LOCATION -->
+
+                <label
+                    class="search-label"
+                    for="locationSearch"
+                >
+                    Or search any location
+                </label>
+
+
+                <div class="search-box">
+
+                    <span class="search-icon">
+                        📍
+                    </span>
+
+
+                    <input
+                        type="text"
+                        id="locationSearch"
+                        placeholder="e.g. Noida, Delhi, Bengaluru..."
+                        autocomplete="off"
+                    >
+
+                </div>
+
+
+                <div
+                    id="locationResults"
+                    class="search-results"
+                >
+                </div>
+
+
+                <div
+                    id="selectedLocation"
+                    class="selected-box"
+                >
+                </div>
+
+            </div>
+
+
+
+            <!-- ================= EXPERIENCE ================= -->
+
+            <div class="form-group">
+
+                <label for="experience">
+                    Experience
+                </label>
+
+
+                <select id="experience">
+
+                    {% for item in experiences %}
+
+                        <option
+                            value="{{ item }}"
+                            {% if selected_experience == item %}
+                                selected
+                            {% endif %}
+                        >
+                            {{ item }}
+                        </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+
+
+            <!-- ================= SEARCH BUTTON ================= -->
+
+            <button
+                type="button"
+                class="search-button"
+                id="searchButton"
+            >
+                🔎 Search Jobs
+            </button>
+
+        </div>
+
+
+
+        <!-- ================= RESULTS ================= -->
+
+        <div class="card">
+
+
+            <h2 class="result-heading">
+                📋 Available Jobs
+            </h2>
+
+
+            {% if jobs %}
+
+                <div class="result-summary">
+
+                    Showing
+                    <strong>{{ jobs|length }}</strong>
+                    matching job postings.
+
+                    {% if selected_role %}
+                        Job Title:
+                        <strong>{{ selected_role }}</strong>
+                    {% endif %}
+
+                    {% if selected_location %}
+                        | Location:
+                        <strong>{{ selected_location }}</strong>
+                    {% endif %}
+
+                </div>
+
+
+                {% for job in jobs %}
+
+                    <div class="job-card">
+
+
+                        <div class="job-title">
+                            {{ job.job_title }}
+                        </div>
+
+
+                        <div class="company">
+                            🏢 {{ job.company }}
+                        </div>
+
+
+                        <div class="job-info">
+
+                            <span class="info-tag">
+                                📍 {{ job.location }}
+                            </span>
+
+
+                            <span class="info-tag">
+                                💼 {{ job.experience or "Not specified" }}
+                            </span>
+
+
+                            <span class="info-tag">
+                                💰 {{ job.salary or "Not disclosed" }}
+                            </span>
+
+                        </div>
+
+
+                        {% if job.skills %}
+
+                            <div class="job-skills">
+
+                                <strong>Skills:</strong>
+
+                                {{ job.skills }}
+
+                            </div>
+
+                        {% endif %}
+
+
+                    </div>
+
+                {% endfor %}
+
+
+            {% else %}
+
+                <div class="no-results">
+
+                    No jobs found.
+
+                    Select a job title or location
+                    and search again.
+
+                </div>
+
+            {% endif %}
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer>
+
+        JobOptic Insights © 2026 |
+        Job Market & Skill Demand Analyzer
+
+    </footer>
+
+
+
+    <!-- ================= JAVASCRIPT ================= -->
+
+    <script>
+
+
+        /* ==================================================
+           ELEMENTS
+           ================================================== */
+
+        const roleSelect =
+            document.getElementById("role");
+
+        const locationSelect =
+            document.getElementById("location");
+
+        const experienceSelect =
+            document.getElementById("experience");
+
+        const searchButton =
+            document.getElementById("searchButton");
+
+
+        const jobTitleSearch =
+            document.getElementById("jobTitleSearch");
+
+        const jobTitleResults =
+            document.getElementById("jobTitleResults");
+
+        const selectedRole =
+            document.getElementById("selectedRole");
+
+
+        const locationSearch =
+            document.getElementById("locationSearch");
+
+        const locationResults =
+            document.getElementById("locationResults");
+
+        const selectedLocation =
+            document.getElementById("selectedLocation");
+
+
+
+        /* ==================================================
+           JOB TITLE SEARCH
+           ================================================== */
+
+        let jobTimer;
+
+
+        jobTitleSearch.addEventListener(
+            "input",
+            function () {
+
+                clearTimeout(jobTimer);
+
+
+                const query =
+                    this.value.trim();
+
+
+                if (query.length < 2) {
+
+                    jobTitleResults.innerHTML = "";
+
+                    jobTitleResults.style.display =
+                        "none";
+
+                    return;
+                }
+
+
+                jobTimer = setTimeout(
+                    function () {
+
+                        fetch(
+                            "/api/job-titles?q="
+                            + encodeURIComponent(query)
+                        )
+
+                        .then(
+                            response =>
+                                response.json()
+                        )
+
+                        .then(
+                            results => {
+
+                                jobTitleResults.innerHTML =
+                                    "";
+
+
+                                if (
+                                    results.length === 0
+                                ) {
+
+                                    jobTitleResults.innerHTML =
+                                        `
+                                        <div class="search-message">
+                                            No matching job titles found.
+                                        </div>
+                                        `;
+
+                                    jobTitleResults.style.display =
+                                        "block";
+
+                                    return;
+                                }
+
+
+                                results.forEach(
+                                    function (item) {
+
+                                        const row =
+                                            document.createElement(
+                                                "div"
+                                            );
+
+
+                                        row.className =
+                                            "search-result-item";
+
+
+                                        const title =
+                                            document.createElement(
+                                                "span"
+                                            );
+
+                                        title.className =
+                                            "result-main";
+
+
+                                        const count =
+                                            document.createElement(
+                                                "span"
+                                            );
+
+                                        count.className =
+                                            "result-count";
+
+
+                                        if (
+                                            typeof item ===
+                                            "string"
+                                        ) {
+
+                                            title.textContent =
+                                                item;
+
+                                            count.textContent =
+                                                "";
+
+                                        } else {
+
+                                            title.textContent =
+                                                item.title;
+
+                                            count.textContent =
+                                                item.count
+                                                + " jobs";
+                                        }
+
+
+                                        row.appendChild(title);
+
+                                        row.appendChild(count);
+
+
+                                        row.addEventListener(
+                                            "click",
+                                            function () {
+
+                                                const selectedTitle =
+                                                    typeof item ===
+                                                    "string"
+                                                        ? item
+                                                        : item.title;
+
+                                                const selectedCount =
+                                                    typeof item ===
+                                                    "string"
+                                                        ? null
+                                                        : item.count;
+
+
+                                                roleSelect.value =
+                                                    selectedTitle;
+
+
+                                                jobTitleSearch.value =
+                                                    selectedTitle;
+
+
+                                                if (
+                                                    selectedCount !== null
+                                                ) {
+
+                                                    selectedRole.textContent =
+                                                        "Selected: "
+                                                        + selectedTitle
+                                                        + " ("
+                                                        + selectedCount
+                                                        + " jobs)";
+
+                                                } else {
+
+                                                    selectedRole.textContent =
+                                                        "Selected: "
+                                                        + selectedTitle;
+                                                }
+
+
+                                                selectedRole.style.display =
+                                                    "block";
+
+
+                                                jobTitleResults.style.display =
+                                                    "none";
+                                            }
+                                        );
+
+
+                                        jobTitleResults.appendChild(
+                                            row
+                                        );
+
+                                    }
+                                );
+
+
+                                jobTitleResults.style.display =
+                                    "block";
+
+                            }
+                        )
+
+                        .catch(
+                            function () {
+
+                                jobTitleResults.innerHTML =
+                                    `
+                                    <div class="search-message">
+                                        Unable to search job titles.
+                                    </div>
+                                    `;
+
+                                jobTitleResults.style.display =
+                                    "block";
+                            }
+                        );
+
+                    },
+                    250
+                );
+
+            }
+        );
+
+
+
+        /* ==================================================
+           LOCATION SEARCH
+           ================================================== */
+
+        let locationTimer;
+
+
+        locationSearch.addEventListener(
+            "input",
+            function () {
+
+                clearTimeout(locationTimer);
+
+
+                const query =
+                    this.value.trim();
+
+
+                if (query.length < 2) {
+
+                    locationResults.innerHTML = "";
+
+                    locationResults.style.display =
+                        "none";
+
+                    return;
+                }
+
+
+                locationTimer = setTimeout(
+                    function () {
+
+                        fetch(
+                            "/api/locations?q="
+                            + encodeURIComponent(query)
+                        )
+
+                        .then(
+                            response =>
+                                response.json()
+                        )
+
+                        .then(
+                            results => {
+
+                                locationResults.innerHTML =
+                                    "";
+
+
+                                if (
+                                    results.length === 0
+                                ) {
+
+                                    locationResults.innerHTML =
+                                        `
+                                        <div class="search-message">
+                                            No matching locations found.
+                                        </div>
+                                        `;
+
+                                    locationResults.style.display =
+                                        "block";
+
+                                    return;
+                                }
+
+
+                                results.forEach(
+                                    function (item) {
+
+                                        const row =
+                                            document.createElement(
+                                                "div"
+                                            );
+
+
+                                        row.className =
+                                            "search-result-item";
+
+
+                                        const location =
+                                            document.createElement(
+                                                "span"
+                                            );
+
+                                        location.className =
+                                            "result-main";
+
+
+                                        location.textContent =
+                                            item.location;
+
+
+                                        const count =
+                                            document.createElement(
+                                                "span"
+                                            );
+
+                                        count.className =
+                                            "result-count";
+
+
+                                        count.textContent =
+                                            item.count
+                                            + " jobs";
+
+
+                                        row.appendChild(
+                                            location
+                                        );
+
+                                        row.appendChild(
+                                            count
+                                        );
+
+
+                                        row.addEventListener(
+                                            "click",
+                                            function () {
+
+                                                locationSelect.value =
+                                                    item.location;
+
+
+                                                locationSearch.value =
+                                                    item.location;
+
+
+                                                selectedLocation.textContent =
+                                                    "Selected: "
+                                                    + item.location
+                                                    + " ("
+                                                    + item.count
+                                                    + " jobs)";
+
+
+                                                selectedLocation.style.display =
+                                                    "block";
+
+
+                                                locationResults.style.display =
+                                                    "none";
+                                            }
+                                        );
+
+
+                                        locationResults.appendChild(
+                                            row
+                                        );
+
+                                    }
+                                );
+
+
+                                locationResults.style.display =
+                                    "block";
+
+                            }
+                        )
+
+                        .catch(
+                            function () {
+
+                                locationResults.innerHTML =
+                                    `
+                                    <div class="search-message">
+                                        Unable to search locations.
+                                    </div>
+                                    `;
+
+                                locationResults.style.display =
+                                    "block";
+                            }
+                        );
+
+                    },
+                    250
+                );
+
+            }
+        );
+
+
+
+        /* ==================================================
+           DROPDOWN SELECTION
+           ================================================== */
+
+        roleSelect.addEventListener(
+            "change",
+            function () {
+
+                if (this.value) {
+
+                    jobTitleSearch.value =
+                        this.value;
+
+                    selectedRole.textContent =
+                        "Selected: " + this.value;
+
+                    selectedRole.style.display =
+                        "block";
+
+                } else {
+
+                    jobTitleSearch.value = "";
+
+                    selectedRole.style.display =
+                        "none";
+                }
+            }
+        );
+
+
+        locationSelect.addEventListener(
+            "change",
+            function () {
+
+                if (this.value) {
+
+                    locationSearch.value =
+                        this.value;
+
+                    selectedLocation.textContent =
+                        "Selected: " + this.value;
+
+                    selectedLocation.style.display =
+                        "block";
+
+                } else {
+
+                    locationSearch.value = "";
+
+                    selectedLocation.style.display =
+                        "none";
+                }
+            }
+        );
+
+
+
+        /* ==================================================
+           SEARCH JOBS
+           ================================================== */
+
+        searchButton.addEventListener(
+            "click",
+            function () {
+
+                const role =
+                    roleSelect.value.trim();
+
+
+                const location =
+                    locationSelect.value.trim();
+
+
+                const experience =
+                    experienceSelect.value.trim();
+
+
+                const params =
+                    new URLSearchParams();
+
+
+                if (role) {
+
+                    params.append(
+                        "role",
+                        role
+                    );
+                }
+
+
+                if (location) {
+
+                    params.append(
+                        "location",
+                        location
+                    );
+                }
+
+
+                if (
+                    experience &&
+                    experience !==
+                    "All Experience"
+                ) {
+
+                    params.append(
+                        "experience",
+                        experience
+                    );
+                }
+
+
+                window.location.href =
+                    "/job-explorer"
+                    + (
+                        params.toString()
+                            ? "?"
+                            + params.toString()
+                            : ""
+                    );
+
+            }
+        );
+
+
+
+        /* ==================================================
+           CLICK OUTSIDE
+           ================================================== */
+
+        document.addEventListener(
+            "click",
+            function (event) {
+
+                if (
+                    !jobTitleSearch.contains(
+                        event.target
+                    ) &&
+                    !jobTitleResults.contains(
+                        event.target
+                    )
+                ) {
+
+                    jobTitleResults.style.display =
+                        "none";
+                }
+
+
+                if (
+                    !locationSearch.contains(
+                        event.target
+                    ) &&
+                    !locationResults.contains(
+                        event.target
+                    )
+                ) {
+
+                    locationResults.style.display =
+                        "none";
+                }
+
+            }
+        );
+
+
+    </script>
+
+
+</body>
+
+</html>
