@@ -345,23 +345,24 @@ def extract_skills(skill_text):
 # =========================================================
 
 def get_db_connection():
-
     try:
         connection = mysql.connector.connect(
             host=DB_CONFIG["host"],
+            port=int(os.getenv("DB_PORT", "4000")),
             user=DB_CONFIG["user"],
             password=DB_CONFIG["password"],
-            database=DB_CONFIG["database"]
+            database=DB_CONFIG["database"],
+            ssl_ca=os.path.join(os.path.dirname(os.path.abspath(__file__)), "isrgrootx1.pem"),
+            ssl_verify_cert=True,
+            ssl_verify_identity=True,
+            connection_timeout=15
         )
 
         return connection
 
     except Error as e:
-
         print("MySQL connection error:", e)
-
         return None
-
 
 # =========================================================
 # GET GLOBAL SKILL COUNTS
